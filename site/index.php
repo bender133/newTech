@@ -12,15 +12,10 @@ try {
   $connect = DBConnection::getConnection();
   $labels = new Labels($connect);
 
-//  $labels->addLabels(Entities::CAMPAIGN, 1, ['label1', 'label4']);
-//  $labels->updateLabels(Entities::CAMPAIGN, 1, ['label1', 'label4']);
-   var_dump($labels->getLabels(Entities::CAMPAIGN, 1));
+  $labels->addLabels(Entities::CAMPAIGN, 1, ['label1', 'label4']);
+  var_dump($labels->getLabels(Entities::CAMPAIGN, 1));
+  $labels->updateLabels(Entities::CAMPAIGN, 1, ['label1', 'label4']);
   $labels->deleteLabels(Entities::CAMPAIGN, 1, ['label1', 'label4']);
 } catch (Exception $e) {
   echo $e->getMessage();
-}
-
-
-function test() {
-
 }
