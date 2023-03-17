@@ -1,0 +1,1 @@
+Тут создать файлы error.log и access.log

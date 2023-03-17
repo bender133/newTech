@@ -1,0 +1,5 @@
+/docker/db/
+/.idea/
+/docker/nginx/log/access.log
+/docker/nginx/log/error.log
+/site/vendor/
