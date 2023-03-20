@@ -6,7 +6,7 @@ namespace App;
 
 use PDO;
 
-class  DBConnection {
+class  DBConnection extends PDO implements ConnectionInterface {
 
   private static PDO $connection;
 
@@ -18,20 +18,13 @@ class  DBConnection {
 
   private const DB_USER = 'root';
 
-  protected function __construct() {
-  }
-
   protected function __clone() {
   }
 
-  public function __wakeup() {
-    throw new \Exception("Cannot unserialize");
-  }
-
-  public static function getConnection(): PDO {
+  public static function getConnection(): ConnectionInterface {
     if (!isset(self::$connection)) {
 
-      self::$connection = new PDO('mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME, self::DB_USER, self::DB_PASS, [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]);
+      self::$connection = new self('mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME, self::DB_USER, self::DB_PASS, [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]);
     }
     return self::$connection;
   }
