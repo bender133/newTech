@@ -34,25 +34,16 @@ class Labels {
    * @throws \Exception
    */
   public function updateLabels(int $entityId, array $labels = []): void {
-    try {
-      $this->connect->beginTransaction();
-
-      foreach ($labels as $label) {
-        if (!$this->checker->isEntityExist([
-          'label' => $label,
-          'entity_id' => $entityId,
-        ])) {
-          throw new InvalidArgumentException("Отсутствует $label");
-        }
+    foreach ($labels as $label) {
+      if (!$this->checker->isEntityExist([
+        'label' => $label,
+        'entity_id' => $entityId,
+      ])) {
+        throw new InvalidArgumentException("Отсутствует $label");
       }
 
       $this->deleteLabels($entityId, $labels);
       $this->addLabels($entityId, $labels);
-
-      $this->connect->commit();
-    } catch (\Exception $e) {
-      $this->connect->rollBack();
-      throw $e;
     }
   }
 
@@ -68,7 +59,7 @@ class Labels {
     }
   }
 
-  public function deleteLabel(int $entityId, string $label): bool {
+  private function deleteLabel(int $entityId, string $label): bool {
     $stmt = $this->connect->prepare("DELETE FROM labels WHERE entity_id = :entity_id AND name = :name");
     return $this->checker->isEntityExist([
         'label' => $label,

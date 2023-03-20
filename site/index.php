@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\DBConnection;
+use App\DBProdConnection;
 use App\EntityChecker;
 use App\Entity\Entities;
 use App\Entity\Labels;
@@ -12,7 +12,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
 try {
   $params = ['entity_id' => 1, 'entity_type' => Entities::CAMPAIGN];
-  $connect = DBConnection::getConnection();
+  $connect = DBProdConnection::getConnection();
 
   if (!(new EntityChecker($connect))->isEntityExist($params)) {
     throw new InvalidArgumentException("Сущсность с такими параметрами отсутствует");
