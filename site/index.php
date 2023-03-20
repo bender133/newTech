@@ -3,33 +3,33 @@
 declare(strict_types=1);
 
 use App\DBConnection;
-use App\EntitiesChecker;
+use App\EntityChecker;
 use App\Entity\Entities;
 use App\Entity\Labels;
-use App\LabelEntityChecker;
+use App\LabelChecker;
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
 try {
-  $params = ['entity_id' => 2, 'entity_type' => Entities::CAMPAIGN];
+  $params = ['entity_id' => 1, 'entity_type' => Entities::CAMPAIGN];
   $connect = DBConnection::getConnection();
 
-  if (!(new EntitiesChecker($connect))->isEntityExist($params)) {
+  if (!(new EntityChecker($connect))->isEntityExist($params)) {
     throw new InvalidArgumentException("Сущсность с такими параметрами отсутствует");
   }
 
-  $labels = new Labels($connect, new LabelEntityChecker($connect));
+  $labels = new Labels($connect, new LabelChecker($connect));
 
-  $labels->addLabels($params['entity_type'], $params['entity_id'], [
+  $labels->addLabels($params['entity_id'], [
     'label1',
     'label4',
   ]);
-  var_dump($labels->getLabels($params['entity_type'], $params['entity_id']));
-  $labels->updateLabels($params['entity_type'], $params['entity_id'], [
+  var_dump($labels->getLabels($params['entity_id']));
+  $labels->updateLabels($params['entity_id'], [
     'label1',
     'label4',
   ]);
-  $labels->deleteLabels($params['entity_type'], $params['entity_id'], [
+  $labels->deleteLabels($params['entity_id'], [
     'label1',
     'label4',
   ]);
