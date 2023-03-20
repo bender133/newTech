@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace App;
 
-class EntitiesChecker implements EntityCheckerInterface {
+class EntityChecker implements EntityCheckerInterface {
 
   private ConnectionInterface $connection;
 
