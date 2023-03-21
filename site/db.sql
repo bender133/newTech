@@ -1,3 +1,4 @@
+CREATE DATABASE db;
 USE db;
 create table entities
 (
@@ -39,6 +40,7 @@ create index name
 create index entity_id
     on labels (entity_id);
 
+CREATE DATABASE db_test;
 USE db_test;
 create table entities
 (

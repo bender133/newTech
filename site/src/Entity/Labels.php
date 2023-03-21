@@ -30,9 +30,6 @@ class Labels {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  /**
-   * @throws \Exception
-   */
   public function updateLabels(int $entityId, array $labels = []): void {
     foreach ($labels as $label) {
       if (!$this->checker->isEntityExist([

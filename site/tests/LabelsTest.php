@@ -1,16 +1,16 @@
 <?php
 
-use App\EntityCheckerInterface;
-use App\ConnectionInterface;
+declare(strict_types=1);
+
+namespace App\Tests;
+
 use App\Entity\Entities;
 use App\Entity\Labels;
-use App\DBTestConnection;
+use App\EntityCheckerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
-class LabelsTest extends TestCase {
-
-  private ?ConnectionInterface $connection;
+class LabelsTest extends Test {
 
   private ?array $params;
 
@@ -19,17 +19,14 @@ class LabelsTest extends TestCase {
   private ?MockObject $checker;
 
   public function setUp(): void {
-
-
-    $this->connection = DBTestConnection::getConnection();
-    $this->connection->beginTransaction();
+    parent::setUp();
     $this->params = ['entity_id' => 1, 'entity_type' => Entities::CAMPAIGN];
     $this->checker = $this->createMock(EntityCheckerInterface::class);
     $this->label = new Labels($this->connection, $this->checker);
   }
 
   public function tearDown(): void {
-    $this->connection->rollBack();
+    parent::tearDown();
     $this->connection = NULL;
     $this->params = NULL;
     $this->checker = NULL;
@@ -54,6 +51,38 @@ class LabelsTest extends TestCase {
     $this->expectException(InvalidArgumentException::class);
     $this->expectExceptionMessage('пустой список');
     $this->label->addLabels($this->params['entity_id'], []);
+  }
+
+  /**
+   * @dataProvider labelsDataProvider
+   *
+   * @param array $labels
+   * @param string $exception
+   * @param string $message
+   */
+  public function testDeleteLabelsFailure(array $labels, string $exception, string $message): void {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage($message);
+    $this->label->deleteLabels($this->params['entity_id'], $labels);
+  }
+
+  public function testUpdateLabelsFailure(): void {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('Отсутствует dkdkdk');
+    $this->label->updateLabels($this->params['entity_id'], ['dkdkdk']);
+  }
+
+  public function labelsDataProvider(): \Generator {
+    yield [
+      ['dkdkdk'],
+      InvalidArgumentException::class,
+      'Отсутствует dkdkdk',
+    ];
+    yield [
+      [],
+      InvalidArgumentException::class,
+      'Список лейблов пуст',
+    ];
   }
 
 }
